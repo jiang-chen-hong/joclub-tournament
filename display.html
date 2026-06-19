@@ -14,8 +14,42 @@ body{overflow:hidden}.screen{height:100vh;padding:28px 34px;display:grid;grid-te
   font-weight: bold;
   cursor: pointer;
 }
+#fullscreenBtn{
+  position:fixed;
+  top:20px;
+  right:20px;
+  z-index:99999;
+  font-size:28px;
+  padding:14px 28px;
+  border-radius:12px;
+  border:0;
+  background:#d4af37;
+  color:#000;
+  font-weight:900;
+  cursor:pointer;
+}
 </style></head><body><div class="screen"><div class="header"><div class="logo">JO♠<span>CLUB</span></div><div class="title"><h1 id="eventName"></h1><h2 id="venueName"></h2></div><div class="live">● FIREBASE LIVE</div></div><div class="main"><div class="left"><div class="timerBox card"><div class="stage" id="stage"></div><div class="timer" id="timer"></div><div class="status" id="status"></div></div><div class="blinds"><div class="blind card"><div class="label">目前盲注 CURRENT</div><div class="value" id="currentBlind"></div></div><div class="blind card"><div class="label">下一級盲注 NEXT</div><div class="value" id="nextBlind"></div></div></div></div><div class="side card"><h3>盲注結構</h3><div class="levelList" id="levelList"></div></div></div><div><div class="stats"><div class="stat card"><div class="k">參賽人數</div><div class="v" id="entries"></div></div><div class="stat card"><div class="k">剩餘玩家</div><div class="v" id="remaining"></div></div><div class="stat card"><div class="k">REBUY 數</div><div class="v" id="rebuy"></div></div><div class="stat card"><div class="k">均碼 AVG STACK</div><div class="v" id="avgStack"></div></div></div><div class="footer"><div class="food card">全場無限餐飲供應</div><div class="slogan card">速度、效率、戰術。制霸極速賽場！</div></div></div></div><script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script><script src="firebase.js"></script><script>
 function render(s){const level=s.levels[s.levelIndex]||s.levels[0],next=s.levels[s.levelIndex+1];eventName.textContent=s.eventName;venueName.textContent=s.venueName;stage.textContent=`${level.name||"LEVEL "+(s.levelIndex+1)}　${blindText(level)}`;currentBlind.textContent=blindText(level);nextBlind.textContent=next?blindText(next):"FINAL";timer.textContent=formatTime(s.secondsLeft);status.textContent=s.running?"比賽進行中":"已暫停 / 待開始";status.className="status"+(s.running?"":" paused");timer.className="timer"+(s.running&&s.secondsLeft<=10?" danger":"");entries.textContent=s.entries;remaining.textContent=s.remaining;rebuy.textContent=s.rebuyCount;avgStack.textContent=money(averageStack(s));levelList.innerHTML="";s.levels.forEach((l,i)=>{const div=document.createElement("div");div.className="levelRow"+(i===s.levelIndex?" active":"");div.innerHTML=`<b>${i+1}</b><span>${blindText(l)}</span><span>${l.minutes}分</span>`;levelList.appendChild(div);});}ensureState().then(()=>listenState(render));
   
 
-</script></body></html>
+</script>
+
+<button id="fullscreenBtn" onclick="goFullscreen()">全螢幕</button>
+
+<script>
+function goFullscreen() {
+  const el = document.documentElement;
+
+  if (el.requestFullscreen) {
+    el.requestFullscreen();
+  } else if (el.webkitRequestFullscreen) {
+    el.webkitRequestFullscreen();
+  } else if (el.msRequestFullscreen) {
+    el.msRequestFullscreen();
+  }
+
+  document.getElementById('fullscreenBtn').style.display='none';
+}
+</script>
+
+</body></html>
